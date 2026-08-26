@@ -1,12 +1,15 @@
-import tkinter as tk
+import customtkinter as ctk
 
 
 # Create the main window
-window = tk.Tk()
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("dark-blue")
+
+window = ctk.CTk()
 window.title("Calculator")
 window.geometry("350x500")
 window.resizable(False, False)
-window.configure(bg="#222222")
+window.configure(fg_color="#222222")
 
 
 # Store the current expression
@@ -14,16 +17,14 @@ expression = ""
 
 
 # Display the expression
-display = tk.Entry(
+display = ctk.CTkEntry(
     window,
     font=("Canva sans", 30, "bold"),
     justify="right",
-    bg="#030958",
-    fg="white",
-    insertbackground="white",
-    borderwidth=0
-    corner_radius=15,
-
+    fg_color="#030958",
+    text_color="white",
+    border_width=0,
+    corner_radius=30,
 )
 
 display.grid(
@@ -42,9 +43,8 @@ def button_click(value):
     global expression
 
     expression += str(value)
-
-    display.delete(0, tk.END)
-    display.insert(tk.END, expression)
+    display.delete(0, ctk.END)
+    display.insert(ctk.END, expression)
 
 
 # Function to calculate the result
@@ -53,22 +53,18 @@ def calculate():
 
     try:
         result = eval(expression)
-
-        display.delete(0, tk.END)
-        display.insert(tk.END, str(result))
-
+        display.delete(0, ctk.END)
+        display.insert(ctk.END, str(result))
         expression = str(result)
 
     except ZeroDivisionError:
-        display.delete(0, tk.END)
-        display.insert(tk.END, "Cannot divide by zero")
-
+        display.delete(0, ctk.END)
+        display.insert(ctk.END, "Cannot divide by zero")
         expression = ""
 
     except Exception:
-        display.delete(0, tk.END)
-        display.insert(tk.END, "Error")
-
+        display.delete(0, ctk.END)
+        display.insert(ctk.END, "Error")
         expression = ""
 
 
@@ -77,8 +73,7 @@ def clear():
     global expression
 
     expression = ""
-
-    display.delete(0, tk.END)
+    display.delete(0, ctk.END)
 
 
 # Function to delete the last character
@@ -86,9 +81,8 @@ def backspace():
     global expression
 
     expression = expression[:-1]
-
-    display.delete(0, tk.END)
-    display.insert(tk.END, expression)
+    display.delete(0, ctk.END)
+    display.insert(ctk.END, expression)
 
 
 # Calculator buttons
@@ -122,31 +116,26 @@ buttons = [
 
 # Create buttons
 for text, row, column in buttons:
-
     if text == "C":
         command = clear
-
     elif text == "⌫":
         command = backspace
-
     elif text == "=":
         command = calculate
-
     else:
         command = lambda value=text: button_click(value)
 
-    button = tk.Button(
+    button = ctk.CTkButton(
         window,
         text=text,
         font=("Arial", 18),
-        bg="#030958",
-        bg="#000107",
-        fg="white",
-        activebackground="#666666",
-        activeforeground="white",
-        borderwidth=0,
-        command=command
-        corner_radius=15,
+        fg_color="#030958",
+        hover_color="#000107",
+        text_color="white",
+        border_width=0,
+        corner_radius=28,
+        height=52,
+        command=command,
     )
 
     button.grid(
@@ -155,8 +144,8 @@ for text, row, column in buttons:
         padx=5,
         pady=5,
         ipadx=10,
-        ipady=15,
-        sticky="nsew"
+        ipady=10,
+        sticky="nsew",
     )
 
 
