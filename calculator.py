@@ -139,6 +139,7 @@ for text, row, column in buttons:
         window,
         text=text,
         font=("Arial", 18),
+        bg="#030958",
         bg="#000107",
         fg="white",
         activebackground="#666666",
