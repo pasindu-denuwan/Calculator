@@ -22,6 +22,7 @@ display = tk.Entry(
     fg="white",
     insertbackground="white",
     borderwidth=0
+    corner_radius=15,
 
 )
 
@@ -138,12 +139,13 @@ for text, row, column in buttons:
         window,
         text=text,
         font=("Arial", 18),
-        bg="#030958",
+        bg="#000107",
         fg="white",
         activebackground="#666666",
         activeforeground="white",
         borderwidth=0,
         command=command
+        corner_radius=15,
     )
 
     button.grid(
