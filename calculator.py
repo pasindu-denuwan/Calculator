@@ -3,7 +3,7 @@ import tkinter as tk
 
 # Create the main window
 window = tk.Tk()
-window.title("Python Calculator")
+window.title("Calculator")
 window.geometry("350x500")
 window.resizable(False, False)
 window.configure(bg="#222222")
@@ -16,12 +16,13 @@ expression = ""
 # Display the expression
 display = tk.Entry(
     window,
-    font=("Arial", 28),
+    font=("Canva sans", 30, "bold"),
     justify="right",
-    bg="#333333",
+    bg="#030958",
     fg="white",
     insertbackground="white",
     borderwidth=0
+
 )
 
 display.grid(
@@ -137,7 +138,7 @@ for text, row, column in buttons:
         window,
         text=text,
         font=("Arial", 18),
-        bg="#444444",
+        bg="#030958",
         fg="white",
         activebackground="#666666",
         activeforeground="white",
