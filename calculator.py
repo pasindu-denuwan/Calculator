@@ -1,41 +1,52 @@
 import tkinter as tk
 
+# MAIN WINDOW
 
-# Create the main window
 window = tk.Tk()
-window.title("Python Calculator")
+window.title("Calculator")
 window.geometry("350x500")
 window.resizable(False, False)
-window.configure(bg="#222222")
+
+# Main background color
+window.configure(bg="#0F172A")
 
 
-# Store the current expression
+# FONT SETTINGS
+
+FONT = "Canva Sans"
+
+# If Canva Sans is not installed on your computer,
+# Tkinter will use another available font.
+
+
 expression = ""
 
 
-# Display the expression
+# DISPLAY
+
 display = tk.Entry(
     window,
-    font=("Arial", 28),
+    font=(FONT, 28, "bold"),
     justify="right",
-    bg="#333333",
-    fg="white",
+    bg="#1E293B",
+    fg="#FFFFFF",
     insertbackground="white",
-    borderwidth=0
+    borderwidth=0,
+    highlightthickness=0
 )
 
 display.grid(
     row=0,
     column=0,
     columnspan=4,
-    padx=10,
+    padx=15,
     pady=20,
-    ipady=15,
+    ipady=18,
     sticky="nsew"
 )
 
+# FUNCTIONS
 
-# Function to add numbers/operators
 def button_click(value):
     global expression
 
@@ -45,7 +56,6 @@ def button_click(value):
     display.insert(tk.END, expression)
 
 
-# Function to calculate the result
 def calculate():
     global expression
 
@@ -70,7 +80,6 @@ def calculate():
         expression = ""
 
 
-# Function to clear the calculator
 def clear():
     global expression
 
@@ -79,7 +88,6 @@ def clear():
     display.delete(0, tk.END)
 
 
-# Function to delete the last character
 def backspace():
     global expression
 
@@ -89,10 +97,88 @@ def backspace():
     display.insert(tk.END, expression)
 
 
-# Calculator buttons
+# ROUNDED BUTTON FUNCTION
+
+def create_rounded_button(
+    parent,
+    text,
+    row,
+    column,
+    command,
+    bg="#334155",
+    fg="#FFFFFF"
+):
+
+    canvas = tk.Canvas(
+        parent,
+        bg="#0F172A",
+        highlightthickness=0,
+        borderwidth=0,
+        height=65
+    )
+
+    canvas.grid(
+        row=row,
+        column=column,
+        padx=6,
+        pady=6,
+        sticky="nsew"
+    )
+
+    def draw_button(event=None):
+
+        canvas.delete("all")
+
+        width = canvas.winfo_width()
+        height = canvas.winfo_height()
+
+        radius = 18
+
+        # Rounded rectangle
+        canvas.create_polygon(
+            radius, 0,
+            width - radius, 0,
+            width, radius,
+            width, height - radius,
+            width - radius, height,
+            radius, height,
+            0, height - radius,
+            0, radius,
+            smooth=True,
+            fill=bg,
+            outline=""
+        )
+
+        # Button text
+        canvas.create_text(
+            width / 2,
+            height / 2,
+            text=text,
+            font=(FONT, 18, "bold"),
+            fill=fg
+        )
+
+    def on_click(event):
+
+        command()
+
+    def on_enter(event):
+
+        canvas.configure(cursor="hand2")
+
+    canvas.bind("<Configure>", draw_button)
+    canvas.bind("<Button-1>", on_click)
+    canvas.bind("<Enter>", on_enter)
+
+    return canvas
+
+
+# CALCULATOR BUTTONS
+
 buttons = [
+
     ("C", 1, 0),
-    ("⌫", 1, 1),
+    ("DEL", 1, 1),
     ("(", 1, 2),
     (")", 1, 3),
 
@@ -118,9 +204,11 @@ buttons = [
 ]
 
 
-# Create buttons
+# CREATE BUTTONS
+
 for text, row, column in buttons:
 
+    # Assign functions
     if text == "C":
         command = clear
 
@@ -133,30 +221,38 @@ for text, row, column in buttons:
     else:
         command = lambda value=text: button_click(value)
 
-    button = tk.Button(
+
+    # Different colors for buttons
+
+    # Operator buttons
+    if text in ["/", "*", "-", "+"]:
+        button_bg = "#2563EB"
+
+    # Equal button
+    elif text == "=":
+        button_bg = "#22C55E"
+
+    # Clear and Backspace buttons
+    elif text in ["C", "⌫"]:
+        button_bg = "#EF4444"
+
+    # Normal buttons
+    else:
+        button_bg = "#334155"
+
+
+    create_rounded_button(
         window,
-        text=text,
-        font=("Arial", 18),
-        bg="#444444",
-        fg="white",
-        activebackground="#666666",
-        activeforeground="white",
-        borderwidth=0,
-        command=command
-    )
-
-    button.grid(
-        row=row,
-        column=column,
-        padx=5,
-        pady=5,
-        ipadx=10,
-        ipady=15,
-        sticky="nsew"
+        text,
+        row,
+        column,
+        command,
+        bg=button_bg
     )
 
 
-# Make rows and columns expand evenly
+# GRID SETTINGS
+
 for i in range(6):
     window.rowconfigure(i, weight=1)
 
@@ -164,5 +260,6 @@ for i in range(4):
     window.columnconfigure(i, weight=1)
 
 
-# Start the calculator
+# START APPLICATION
+
 window.mainloop()
